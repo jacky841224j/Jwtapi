@@ -6,12 +6,10 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//
 var jwtConfigSection = builder.Configuration.GetSection(nameof(JwtConfig));
 builder.Services.Configure<JwtConfig>(jwtConfigSection);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

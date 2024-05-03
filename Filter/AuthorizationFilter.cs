@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 using Jwtapi.Enum;
 
-namespace Jwtapi.Controllers
+namespace Jwtapi.Filter
 {
     public class Role : Attribute, IAuthorizationFilter
     {

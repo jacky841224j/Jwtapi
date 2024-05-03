@@ -1,6 +1,7 @@
 ﻿using Jwtapi.Contracts;
 using Jwtapi.Dto;
 using Jwtapi.Enum;
+using Jwtapi.Filter;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.IdentityModel.Tokens.Jwt;
@@ -31,15 +32,15 @@ namespace Jwtapi.Controllers
         /// <param name="token"></param>
         [HttpGet]
         [Role(UserTypes.Admin)]
-        public void GetJwtToken(string token)
+        public IEnumerable<Claim> GetJwtToken(string token)
         {
-            // 創建 JwtSecurityTokenHandler 實例
+            // 建立 JwtSecurityTokenHandler 實例
             var tokenHandler = new JwtSecurityTokenHandler();
 
             // 解析 JWT
             var jwtTokenObject = tokenHandler.ReadJwtToken(token);
 
-            // 獲取 JWT 中的 Claims
+            // 解析 JWT 中的 Claims
             var claims = jwtTokenObject.Claims;
 
             // 輸出所有 Claims
@@ -47,6 +48,8 @@ namespace Jwtapi.Controllers
             {
                 Console.WriteLine($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
             }
+
+            return claims;
         }
 
         private IdentityResultDto GenerateToken(string userId,string role)
@@ -70,7 +73,7 @@ namespace Jwtapi.Controllers
 
             return new IdentityResultDto()
             {
-                AccessToken = access_token,
+                AccessToken = $"Bearer {access_token}",
             };
         }
     }
