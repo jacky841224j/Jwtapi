@@ -1,11 +1,10 @@
 ﻿using Jwtapi.Contracts;
 using Jwtapi.Dto;
+using Jwtapi.Enum;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 
 namespace Jwtapi.Controllers
 {
@@ -21,16 +20,41 @@ namespace Jwtapi.Controllers
         }
 
         [HttpGet]
-        public IdentityResultDto Login()
+        public IdentityResultDto Login(string role)
         {
-            return GenerateToken("tian");
+            return GenerateToken("tian", role);
         }
 
-        private IdentityResultDto GenerateToken(string userId)
+        /// <summary>
+        /// 取得JwtToken資訊
+        /// </summary>
+        /// <param name="token"></param>
+        [HttpGet]
+        [Role(UserTypes.Admin)]
+        public void GetJwtToken(string token)
+        {
+            // 創建 JwtSecurityTokenHandler 實例
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            // 解析 JWT
+            var jwtTokenObject = tokenHandler.ReadJwtToken(token);
+
+            // 獲取 JWT 中的 Claims
+            var claims = jwtTokenObject.Claims;
+
+            // 輸出所有 Claims
+            foreach (var claim in claims)
+            {
+                Console.WriteLine($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
+            }
+        }
+
+        private IdentityResultDto GenerateToken(string userId,string role)
         {
             var claims = new List<Claim>
             {
                 new Claim("UID", userId),
+                new Claim("Role",role),
             };
 
             var securityToken = new JwtSecurityToken(
@@ -47,12 +71,6 @@ namespace Jwtapi.Controllers
             return new IdentityResultDto()
             {
                 AccessToken = access_token,
-                //Expires = expireTime.ToUnixTimeMilliseconds(),
-                //RefreshToken = refreshToken,
-                //CompanyID = adminUser.CompanyID,
-                //Account = adminUser.Account,
-                //NickName = adminUser.NickName,
-                //UserType = adminUser.UserType
             };
         }
     }
