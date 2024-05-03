@@ -32,7 +32,7 @@ namespace Jwtapi.Controllers
         /// <param name="token"></param>
         [HttpGet]
         [Role(UserTypes.Admin)]
-        public IEnumerable<Claim> GetJwtToken(string token)
+        private IEnumerable<Claim> GetJwtToken(string token)
         {
             // 建立 JwtSecurityTokenHandler 實例
             var tokenHandler = new JwtSecurityTokenHandler();
