@@ -1,9 +1,14 @@
+using Jwtapi.Contracts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//
+var jwtConfigSection = builder.Configuration.GetSection(nameof(JwtConfig));
+builder.Services.Configure<JwtConfig>(jwtConfigSection);
 
 // Add services to the container.
 
@@ -69,7 +74,7 @@ builder.Services.AddAuthentication(options =>
             .AddJsonFile("appsettings.json")
             .Build();
 
-        var jwtSecret = config.GetSection("JwtConfig")["Secret"];
+        var jwtSecret = config.GetSection("JwtConfig")["SecretKey"];
 
         if (string.IsNullOrEmpty(jwtSecret))
         {
