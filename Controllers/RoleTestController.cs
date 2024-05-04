@@ -1,5 +1,4 @@
-﻿using Jwtapi.Enum;
-using Jwtapi.Filter;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Jwtapi.Controllers
@@ -9,21 +8,21 @@ namespace Jwtapi.Controllers
     public class RoleTestController : Controller
     {
         [HttpGet]
-        [Role(UserTypes.Admin)]
+        [Authorize(Roles = "Admin")]
         public string Admin()
         {
             return "呼叫成功";
         }
 
         [HttpGet]
-        [Role(UserTypes.User)]
+        [Authorize(Roles = "Admin,User")]
         public string User()
         {
             return "呼叫成功";
         }
 
         [HttpGet]
-        [Role(UserTypes.None)]
+        [Authorize(Roles = "None")]
         public string None()
         {
             return "呼叫成功";

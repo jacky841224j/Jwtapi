@@ -2,6 +2,7 @@
 using Jwtapi.Dto;
 using Jwtapi.Enum;
 using Jwtapi.Filter;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.IdentityModel.Tokens.Jwt;
@@ -31,8 +32,7 @@ namespace Jwtapi.Controllers
         /// </summary>
         /// <param name="token"></param>
         [HttpGet]
-        [Role(UserTypes.Admin)]
-        private IEnumerable<Claim> GetJwtToken(string token)
+        public IEnumerable<Claim> GetJwtToken(string token)
         {
             // 建立 JwtSecurityTokenHandler 實例
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -56,8 +56,8 @@ namespace Jwtapi.Controllers
         {
             var claims = new List<Claim>
             {
-                new Claim("UID", userId),
-                new Claim("Role",role),
+                new Claim(ClaimTypes.Role,role),
+                new Claim(ClaimTypes.NameIdentifier,userId),
             };
 
             var securityToken = new JwtSecurityToken(
