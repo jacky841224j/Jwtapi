@@ -21,7 +21,8 @@ namespace Jwtapi.Filter
             // 如果沒有 JWT，返回 401 未授權
             if (jwtToken == null)
             {
-                throw new Exception();
+                context.Result = new UnauthorizedResult();
+                return;
             }
 
             try
@@ -37,7 +38,8 @@ namespace Jwtapi.Filter
 
                 if (roleNum < (int)_userTypes)
                 {
-                    throw new Exception();
+                    context.Result = new UnauthorizedResult();
+                    return;
                 }
             }
             catch (Exception)
